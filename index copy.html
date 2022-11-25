@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="file" id="file">
+  <button>识别</button>
+  <script>
+    let fileDom = document.getElementById('file'); // 为input 标签Dom元素
+    fileDom.onchange = function(e) {
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('avatar', file);
+        let xhr = new XMLHttpRequest();
+        
+        xhr.open('POST', '/shiBie');
+        xhr.onload = function() {
+            console.log(xhr);
+        }
+        xhr.send(formData);
+    }
+  </script>
+</body>
+</html>

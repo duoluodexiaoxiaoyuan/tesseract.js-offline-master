@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tesseract.js Offline</title>
+  <body>
+    <div>
+      识别需要的时间:
+      <span id="needTime"></span>
+    </div>
+    <div>
+      <input type="file" id="scwj" />
+      <button onclick="xztp()">下载图片</button>
+      <img src="" id="img" alt="暂无" width="50" height="50" />
+      <button onclick="shiBie()">识别图片内容</button>
+      <div id="textContent">
+
+      </div>
+    </div>
+  </body>
+  <script src="../node_modules/tesseract.js/dist/tesseract.min.js"></script>
+  <script>
+    // 设置初始消耗为0
+    var count = 0
+    //先把图片上传显示出来
+    var filename = document.getElementById("scwj");
+    var img = document.getElementById("img");
+    var fileBase64;
+    filename.onchange = function (e) {
+      img.src = URL.createObjectURL(this.files[0]);
+      fileBase64 = e.target.files[0]
+    };
+    //加一个a标签，获取图片的流，点download下载就好了
+    function xztp() {
+      var bqa = document.createElement("a");
+      console.log(bqa);
+      bqa.setAttribute("href", URL.createObjectURL(filename.files[0]));
+      bqa.setAttribute("download", filename.name);
+      bqa.click();
+    }
+
+    // 识别图片内容
+    function shiBie() {
+      // 每点一次识别重新计时
+      count = 0
+      let timer = setInterval(() => {
+        count = count + 1
+        document.getElementById('needTime').innerText = count + '秒'
+      }, 1000)
+      const { createWorker } = Tesseract;
+      const worker = createWorker({
+        workerPath: '../node_modules/tesseract.js/dist/worker.min.js',
+        langPath: '../lang-data',
+        corePath: '../node_modules/tesseract.js-core/tesseract-core.wasm.js',
+        logger: m => console.log(m),
+      });
+      (async () => {
+        document.getElementById('textContent').innerText = '正在识别图片内容，请稍后...'
+        await worker.load();
+        await worker.loadLanguage('chi_sim+eng');  // 这样写就支持中文和英文
+        await worker.initialize('chi_sim+eng');
+        const { data: { text } } = await worker.recognize(fileBase64);
+        console.log(text);
+        document.getElementById('textContent').innerText = text
+        // 识别出来以后清楚定时器
+        clearInterval(timer)
+        await worker.terminate();
+      })();
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>

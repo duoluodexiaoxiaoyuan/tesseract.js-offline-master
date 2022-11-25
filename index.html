@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    识别需要的时间:
+    <span id="needTime"></span>
+  </div>
+  <input type="file" id="file">
+  <div id="textContent">
+
+  </div>
+  <script>
+    // 设置初始消耗为0
+    var count = 0
+    let fileDom = document.getElementById('file'); // 为input 标签Dom元素
+    fileDom.onchange = function(e) {
+        count = 0
+        let timer = setInterval(() => {
+        count = count + 1
+        document.getElementById('needTime').innerText = count + '秒'
+        }, 1000)
+        let file = e.target.files[0];
+        let formData = new FormData();
+        formData.append('avatar', file);
+        let xhr = new XMLHttpRequest();
+        
+        xhr.open('POST', '/shiBie')
+        xhr.onload = function() {
+            console.log(xhr);
+            if(xhr.status == 200 && xhr.readyState == 4) {
+              document.getElementById('textContent').innerText = xhr.response
+              clearInterval(timer)
+            }
+
+        }
+        xhr.send(formData);
+    }
+  </script>
+</body>
+</html>
