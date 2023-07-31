@@ -1,38 +1,8 @@
-Tesseract.js Offline
-====================
+# TestReact.js是一个将图片里面的内容进行文字识别的库
 
-This repository is a show case for how to use tesseract.js without downloading any files from remote.
+### 这个仓库的demo通过两种方式分别进行了实现
 
-# Installation
+1. 直接引入js库通过前端来实现(推荐你直接看browser/index.html代码，看一下代码应该就可以看懂了)
+2. 通过启用node服务来实现
+3. TestReact.js库是支持多语言识别的，所以你可能需要根据你的需求来看官方文档
 
-```shell
-$ npm install
-```
-
-# Usage
-
-## Browser
-
-For browser version, execute command below to start the server
-
-```shell
-$ npm run start
-```
-
-Visit [http://localhost:3000/browser/](http://localhost:3000/browser/) and press F12 to check console logs.
-
-## Node.js
-
-For Node.js version, simply run this command
-
-```shell
-$ node ./node/index.js
-```
-
-You will see the result in terminal
-
-# FAQ
-
-## Where can I download \*.traineddata.gz for other languages?
-
-You can download from [naptha/tessdata](https://github.com/naptha/tessdata/tree/gh-pages/4.0.0)
